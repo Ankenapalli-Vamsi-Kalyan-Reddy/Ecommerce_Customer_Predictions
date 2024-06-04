@@ -104,3 +104,88 @@ X = customers[['Avg. Session Length', 'Time on App', 'Time on Website', 'Length 
 
 y = customers['Yearly Amount Spent']
 
+"""** Use model_selection.train_test_split from sklearn to split the data into training and testing sets. Set test_size=0.3 and random_state=101**"""
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.3, random_state=101)
+
+"""## Training the Model
+
+Now its time to train our model on our training data!
+
+** Import LinearRegression from sklearn.linear_model **
+"""
+
+from sklearn.linear_model import LinearRegression
+
+"""**Create an instance of a LinearRegression() model named lm.**"""
+
+lm = LinearRegression()
+
+"""** Train/fit lm on the training data.**"""
+
+lm.fit(X_train, y_train)
+
+
+
+"""**Print out the coefficients of the model**"""
+
+lm.coef_
+
+
+
+
+
+"""## Predicting Test Data
+Now that we have fit our model, let's evaluate its performance by predicting off the test values!
+
+** Use lm.predict() to predict off the X_test set of the data.**
+"""
+
+predictions = lm.predict(X_test)
+
+"""** Create a scatterplot of the real test values versus the predicted values. **"""
+
+plt.scatter(y_test, predictions)
+
+
+
+"""## Evaluating the Model
+
+Let's evaluate our model performance by calculating the residual sum of squares and the explained variance score (R^2).
+
+** Calculate the Mean Absolute Error, Mean Squared Error, and the Root Mean Squared Error. Refer to the lecture or to Wikipedia for the formulas**
+"""
+
+from sklearn import metrics
+
+metrics.mean_absolute_error(y_test, predictions)
+
+metrics.mean_squared_error(y_test, predictions)
+
+np.sqrt(metrics.mean_squared_error(y_test, predictions))
+
+
+
+"""## Residuals
+
+You should have gotten a very good model with a good fit. Let's quickly explore the residuals to make sure everything was okay with our data.
+
+**Plot a histogram of the residuals and make sure it looks normally distributed. Use either seaborn distplot, or just plt.hist().**
+"""
+
+sns.distplot((y_test-predictions))
+
+
+
+"""## Conclusion
+We still want to figure out the answer to the original question, do we focus our efforst on mobile app or website development? Or maybe that doesn't even really matter, and Membership Time is what is really important.  Let's see if we can interpret the coefficients at all to get an idea.
+
+** Recreate the dataframe below. **
+"""
+
+cdf = pd.DataFrame(lm.coef_, X.columns, columns=['Coeff'])
+
+cdf
+
